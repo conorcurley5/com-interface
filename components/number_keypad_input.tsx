@@ -98,12 +98,12 @@ export function NumberKeypadInput({
         type="button"
         onClick={() => setOpen(true)}
         className={cn(
-          "flex h-12 w-full items-center justify-between rounded-md border border-input bg-background px-4 py-2 text-left text-lg font-medium shadow-sm transition-colors hover:bg-accent focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+          "flex flex-col h-12 grow-1 w-full items-center justify-between rounded-md border border-input bg-background px-4 py-2 text-left text-lg font-medium shadow-sm transition-colors hover:bg-accent focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
           className
         )}
       >
-        <span className="text-sm text-muted-foreground">{label}</span>
-        <span className={cn(isPlaceholder && "text-muted-foreground")}>
+        {/* <span className="text-sm text-muted-foreground">{label}</span> */}
+        <span className={cn(isPlaceholder && "text-muted-foreground flex flex-grow")}>
           {displayValue}
         </span>
       </button>

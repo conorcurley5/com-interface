@@ -40,29 +40,29 @@ export default function Page() {
       <SidebarInset>
         <SiteHeader />
         <div className="flex flex-1 flex-col">
-          <div className="@container/main flex flex-1 flex-col gap-2">
-            <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-              <Tabs defaultValue="jog" className="w-full mx-6">
-                <TabsList>
+          <div className="@container/main flex flex-1 flex-col gap-2 h-full">
+            <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6 h-full">
+              <Tabs defaultValue="jog" className="h-full mx-6" >
+                <TabsList >
                   <TabsTrigger value="jog">Jog</TabsTrigger>
                   <TabsTrigger value="goto">Go To</TabsTrigger>
                   <TabsTrigger value="control">Control</TabsTrigger>
                 </TabsList>
                 <TabsContent value="jog">
-                  <Card>
+                  <Card className="h-full">
                       <CardHeader>
                           <CardTitle>Jog</CardTitle>
                           <CardDescription>Jog the motor in a selected direction at a given velocity.</CardDescription>
                       </CardHeader>
-                      <CardFooter className="flex-col items-center gap-1.5 text-sm">
-                        <ButtonGroup className="[--radius:9999rem]">
+                      <CardFooter className="flex-col items-center justify-center gap-1.5 text-sm flex-grow-1">
+                        <ButtonGroup className="[--radius:9999rem] w-full">
                           <ButtonGroup>
                             <Button variant="outline" size="icon">
                               <ChevronsLeft />
                             </Button>
                           </ButtonGroup>
 
-                          <ButtonGroup>
+                          <ButtonGroup className="grow-1">
                             <InputGroup>
                               <NumberKeypadInput
                                   label="Quantity"
