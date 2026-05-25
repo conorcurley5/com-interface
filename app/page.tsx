@@ -1,3 +1,5 @@
+"use client"
+
 import { AppSidebar } from "@/components/app-sidebar"
 import { ChartAreaInteractive } from "@/components/chart-area-interactive"
 import { DataTable } from "@/components/data-table"
@@ -17,10 +19,16 @@ import { AudioLines, ChevronsLeft, ChevronsRight, Home, Plus, PowerOff, ZapOff }
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@/components/ui/input-group"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { Separator } from "@/components/ui/separator"
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
+import { NumberKeypadInput } from "@/components/number_keypad_input"
+import { useState } from "react"
 
 export default function Page() {
+  const [quantity, setQuantity] = useState("")
+
   return (
     <SidebarProvider
+    defaultOpen={false}
       style={
         {
           "--sidebar-width": "calc(var(--spacing) * 72)",
@@ -28,14 +36,20 @@ export default function Page() {
         } as React.CSSProperties
       }
     >
-      <AppSidebar variant="inset" />
+      <AppSidebar variant="inset"  />
       <SidebarInset>
         <SiteHeader />
         <div className="flex flex-1 flex-col">
           <div className="@container/main flex flex-1 flex-col gap-2">
             <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-              <div className="grid grid-cols-3 gap-">
-                  <Card className="mx-6">
+              <Tabs defaultValue="jog" className="w-full mx-6">
+                <TabsList>
+                  <TabsTrigger value="jog">Jog</TabsTrigger>
+                  <TabsTrigger value="goto">Go To</TabsTrigger>
+                  <TabsTrigger value="control">Control</TabsTrigger>
+                </TabsList>
+                <TabsContent value="jog">
+                  <Card>
                       <CardHeader>
                           <CardTitle>Jog</CardTitle>
                           <CardDescription>Jog the motor in a selected direction at a given velocity.</CardDescription>
@@ -50,11 +64,14 @@ export default function Page() {
 
                           <ButtonGroup>
                             <InputGroup>
-                              <InputGroupInput
-                                placeholder={
-                                  "Velocity"
-                                }
-                              />
+                              <NumberKeypadInput
+                                  label="Quantity"
+                                  value={quantity}
+                                  onChange={setQuantity}
+                                  placeholder="0"
+                                  allowDecimal={false}
+                                />
+
                             </InputGroup>
                           </ButtonGroup>
 
@@ -66,8 +83,9 @@ export default function Page() {
                         </ButtonGroup>
                       </CardFooter>
                   </Card>
-
-                  <Card className="mx-6">
+                </TabsContent>
+                <TabsContent value="goto">
+                  <Card>
                       <CardHeader>
                           <CardTitle>Go To</CardTitle>
                           <CardDescription>Move the motor to a specific position.</CardDescription>
@@ -100,8 +118,9 @@ export default function Page() {
                         </ButtonGroup>
                       </CardFooter>
                   </Card>
-
-                  <Card className="mx-6">
+                </TabsContent>
+                <TabsContent value="control">
+                  <Card>
                       <CardHeader>
                           <CardTitle>Control</CardTitle>
                           <CardDescription>De-energize or shut down the motor system.</CardDescription>
@@ -122,7 +141,8 @@ export default function Page() {
                         {/* </ButtonGroup> */}
                       </CardFooter>
                   </Card>
-              </div>
+                </TabsContent>
+              </Tabs>
 
               {/* <SectionCards />
               <div className="px-4 lg:px-6">
