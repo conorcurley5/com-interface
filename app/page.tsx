@@ -65,7 +65,7 @@ export default function Page() {
                           <ButtonGroup className="grow-1">
                             <InputGroup>
                               <NumberKeypadInput
-                                  label="Quantity"
+                                  label="Speed (RPM)"
                                   value={quantity}
                                   onChange={setQuantity}
                                   placeholder="0"
