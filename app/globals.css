@@ -48,6 +48,54 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+.rcom-simple-keyboard.hg-theme-default {
+  background: transparent;
+  font-family: var(--font-sans);
+  padding: 0;
+}
+
+.rcom-simple-keyboard .hg-row {
+  gap: 0.35rem;
+}
+
+.rcom-simple-keyboard .hg-button {
+  height: 2.75rem;
+  border: 1px solid var(--border);
+  border-bottom-width: 1px;
+  border-radius: 0.5rem;
+  background: var(--muted) !important;
+  /* color: #fff !important; */
+  box-shadow: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.rcom-simple-keyboard .hg-button span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted-foreground) !important;
+  line-height: 1;
+}
+
+.rcom-simple-keyboard .hg-button:active {
+  background: var(--muted);
+}
+
+.rcom-simple-keyboard .simple-keyboard-action {
+  background: var(--muted);
+  color: var(--muted-foreground);
+}
+
+.rcom-simple-keyboard .simple-keyboard-space {
+  max-width: none;
+}
+
+.rcom-simple-keyboard-numeric {
+  max-width: 22rem;
+  margin-inline: auto;
+}
+
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.141 0.005 285.823);

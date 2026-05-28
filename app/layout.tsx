@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/theme_provider";
 import { Toaster } from "@/components/ui/sonner";
+import { SimpleKeyboardLayer } from "@/components/simple-keyboard-layer";
 
 const nunitoSansHeading = Nunito_Sans({subsets:['latin'],variable:'--font-heading'});
 
@@ -47,6 +48,7 @@ export default function RootLayout({
           >
             <Toaster />
             <TooltipProvider>{children}</TooltipProvider>
+            <SimpleKeyboardLayer />
           </ThemeProvider>
       </body>
     </html>

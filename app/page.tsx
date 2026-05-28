@@ -29,6 +29,12 @@ import {
 import { AppSidebar } from "@/components/app-sidebar"
 import { NumberKeypadInput } from "@/components/number_keypad_input"
 import { SiteHeader } from "@/components/site-header"
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -41,14 +47,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -159,8 +157,6 @@ export default function Page() {
   const [log, setLog] = React.useState<string[]>([])
   const [speed, setSpeed] = React.useState("1500")
   const [position, setPosition] = React.useState("10000")
-  const [velocityConfigOpen, setVelocityConfigOpen] = React.useState(false)
-  const [positionConfigOpen, setPositionConfigOpen] = React.useState(false)
   const [velocityMax, setVelocityMax] = React.useState("1500")
   const [velocityAccel, setVelocityAccel] = React.useState("1000")
   const [velocityDecel, setVelocityDecel] = React.useState("1000")
@@ -429,7 +425,6 @@ export default function Page() {
       maxVelocity,
       quickStopDeceleration,
     })
-    setVelocityConfigOpen(false)
   }, [runCommand, velocityAccel, velocityDecel, velocityMax, velocityQuickStopDecel])
 
   const configureProfilePosition = React.useCallback(async () => {
@@ -445,7 +440,6 @@ export default function Page() {
       endVelocity: parseInteger(positionEndVelocity),
       motionProfileType: parseInteger(positionMotionProfileType),
     })
-    setPositionConfigOpen(false)
   }, [
     positionAccel,
     positionDecel,
@@ -655,16 +649,78 @@ export default function Page() {
                           onValueChange={(value) => setSpeed(String(value[0] ?? 0))}
                         />
                       </div>
+                      <Accordion
+                        type="single"
+                        collapsible
+                        className="mt-4 rounded-lg border bg-card/50 px-3"
+                      >
+                        <AccordionItem value="velocity-config">
+                          <AccordionTrigger>Velocity Config</AccordionTrigger>
+                          <AccordionContent>
+                            <form
+                              className="grid gap-4"
+                              onSubmit={(event) => {
+                                event.preventDefault()
+                                void configureProfileVelocity()
+                              }}
+                            >
+                              <div className="grid gap-3 grid-cols-2">
+                                <div className="grid gap-2">
+                                  <Label htmlFor="velocity-config-accel">Acceleration</Label>
+                                  <Input
+                                    id="velocity-config-accel"
+                                    inputMode="numeric"
+                                    value={velocityAccel}
+                                    onChange={(event) => setVelocityAccel(event.target.value)}
+                                  />
+                                </div>
+                                <div className="grid gap-2">
+                                  <Label htmlFor="velocity-config-decel">Deceleration</Label>
+                                  <Input
+                                    id="velocity-config-decel"
+                                    inputMode="numeric"
+                                    value={velocityDecel}
+                                    onChange={(event) => setVelocityDecel(event.target.value)}
+                                  />
+                                </div>
+                                <div className="grid gap-2">
+                                  <Label htmlFor="velocity-config-max">Max velocity</Label>
+                                  <Input
+                                    id="velocity-config-max"
+                                    inputMode="numeric"
+                                    value={velocityMax}
+                                    onChange={(event) => setVelocityMax(event.target.value)}
+                                  />
+                                </div>
+                                <div className="grid gap-2">
+                                  <Label htmlFor="velocity-config-quick-stop">
+                                    Quick stop deceleration
+                                  </Label>
+                                  <Input
+                                    id="velocity-config-quick-stop"
+                                    inputMode="numeric"
+                                    value={velocityQuickStopDecel}
+                                    onChange={(event) => setVelocityQuickStopDecel(event.target.value)}
+                                  />
+                                </div>
+                              </div>
+                              <Button
+                                type="submit"
+                                disabled={!serialReady || Boolean(busyCommand)}
+                              >
+                                {busyCommand === "configure_velocity" ? (
+                                  <Loader2 className="animate-spin" />
+                                ) : (
+                                  <Zap />
+                                )}
+                                Submit Config
+                              </Button>
+                            </form>
+                          </AccordionContent>
+                        </AccordionItem>
+                      </Accordion>
                     </CardContent>
                     <CardFooter className="servo-control-footer flex flex-wrap items-center gap-2">
-                      <Button
-                        variant="outline"
-                        onClick={() => setVelocityConfigOpen(true)}
-                        disabled={Boolean(busyCommand)}
-                      >
-                        <Zap />
-                        Set Config
-                      </Button>
                       <ButtonGroup className="servo-jog-group [--radius:9999rem]">
                         <Button
                           variant="outline"
@@ -731,16 +787,87 @@ export default function Page() {
                           allowNegative
                         />
                       </div>
+                      <Accordion
+                        type="single"
+                        collapsible
+                        className="mt-4 rounded-lg border bg-card/50 px-3"
+                      >
+                        <AccordionItem value="position-config">
+                          <AccordionTrigger>Position Config</AccordionTrigger>
+                          <AccordionContent>
+                            <form
+                              className="grid gap-4"
+                              onSubmit={(event) => {
+                                event.preventDefault()
+                                void configureProfilePosition()
+                              }}
+                            >
+                              <div className="grid gap-3 grid-cols-2">
+                                <div className="grid gap-2">
+                                  <Label htmlFor="position-config-velocity">Profile velocity</Label>
+                                  <Input
+                                    id="position-config-velocity"
+                                    inputMode="numeric"
+                                    value={positionVelocity}
+                                    onChange={(event) => setPositionVelocity(event.target.value)}
+                                  />
+                                </div>
+                                <div className="grid gap-2">
+                                  <Label htmlFor="position-config-accel">Acceleration</Label>
+                                  <Input
+                                    id="position-config-accel"
+                                    inputMode="numeric"
+                                    value={positionAccel}
+                                    onChange={(event) => setPositionAccel(event.target.value)}
+                                  />
+                                </div>
+                                <div className="grid gap-2">
+                                  <Label htmlFor="position-config-decel">Deceleration</Label>
+                                  <Input
+                                    id="position-config-decel"
+                                    inputMode="numeric"
+                                    value={positionDecel}
+                                    onChange={(event) => setPositionDecel(event.target.value)}
+                                  />
+                                </div>
+                                <div className="grid gap-2">
+                                  <Label htmlFor="position-config-end-velocity">End velocity</Label>
+                                  <Input
+                                    id="position-config-end-velocity"
+                                    inputMode="numeric"
+                                    value={positionEndVelocity}
+                                    onChange={(event) => setPositionEndVelocity(event.target.value)}
+                                  />
+                                </div>
+                                <div className="grid gap-2 col-span-2">
+                                  <Label htmlFor="position-config-motion-profile">
+                                    Motion profile type
+                                  </Label>
+                                  <Input
+                                    id="position-config-motion-profile"
+                                    inputMode="numeric"
+                                    value={positionMotionProfileType}
+                                    onChange={(event) => setPositionMotionProfileType(event.target.value)}
+                                  />
+                                </div>
+                              </div>
+                              <Button
+                                type="submit"
+                                disabled={!serialReady || Boolean(busyCommand)}
+                              >
+                                {busyCommand === "configure_position" ? (
+                                  <Loader2 className="animate-spin" />
+                                ) : (
+                                  <Zap />
+                                )}
+                                Submit Config
+                              </Button>
+                            </form>
+                          </AccordionContent>
+                        </AccordionItem>
+                      </Accordion>
                     </CardContent>
                     <CardFooter className="servo-control-footer flex flex-wrap items-center gap-2">
-                      <Button
-                        variant="outline"
-                        onClick={() => setPositionConfigOpen(true)}
-                        disabled={Boolean(busyCommand)}
-                      >
-                        <Zap />
-                        Set Config
-                      </Button>
                       <Button
                         onClick={() => void moveAbsolute()}
                         disabled={motionBlocked}
@@ -878,177 +1005,6 @@ export default function Page() {
                   </Card>
                 </TabsContent>
               </Tabs>
-
-              <Dialog open={velocityConfigOpen} onOpenChange={setVelocityConfigOpen}>
-                <DialogContent>
-                  <form
-                    className="grid gap-4"
-                    onSubmit={(event) => {
-                      event.preventDefault()
-                      void configureProfileVelocity()
-                    }}
-                  >
-                    <DialogHeader>
-                      <DialogTitle>Profile Velocity Config</DialogTitle>
-                      <DialogDescription>
-                        Edit the parameters sent with configure_velocity.
-                      </DialogDescription>
-                    </DialogHeader>
-
-                    <div className="grid gap-3 grid-cols-2">
-                      <div className="grid gap-2">
-                        <Label htmlFor="velocity-config-accel">Acceleration</Label>
-                        <Input
-                          id="velocity-config-accel"
-                          inputMode="numeric"
-                          value={velocityAccel}
-                          onChange={(event) => setVelocityAccel(event.target.value)}
-                        />
-                      </div>
-                      <div className="grid gap-2">
-                        <Label htmlFor="velocity-config-decel">Deceleration</Label>
-                        <Input
-                          id="velocity-config-decel"
-                          inputMode="numeric"
-                          value={velocityDecel}
-                          onChange={(event) => setVelocityDecel(event.target.value)}
-                        />
-                      </div>
-                      <div className="grid gap-2">
-                        <Label htmlFor="velocity-config-max">Max velocity</Label>
-                        <Input
-                          id="velocity-config-max"
-                          inputMode="numeric"
-                          value={velocityMax}
-                          onChange={(event) => setVelocityMax(event.target.value)}
-                        />
-                      </div>
-                      <div className="grid gap-2">
-                        <Label htmlFor="velocity-config-quick-stop">
-                          Quick stop deceleration
-                        </Label>
-                        <Input
-                          id="velocity-config-quick-stop"
-                          inputMode="numeric"
-                          value={velocityQuickStopDecel}
-                          onChange={(event) => setVelocityQuickStopDecel(event.target.value)}
-                        />
-                      </div>
-                    </div>
-
-                    <DialogFooter>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        onClick={() => setVelocityConfigOpen(false)}
-                      >
-                        Cancel
-                      </Button>
-                      <Button
-                        type="submit"
-                        disabled={!serialReady || Boolean(busyCommand)}
-                      >
-                        {busyCommand === "configure_velocity" ? (
-                          <Loader2 className="animate-spin" />
-                        ) : (
-                          <Zap />
-                        )}
-                        Submit
-                      </Button>
-                    </DialogFooter>
-                  </form>
-                </DialogContent>
-              </Dialog>
-
-              <Dialog open={positionConfigOpen} onOpenChange={setPositionConfigOpen}>
-                <DialogContent>
-                  <form
-                    className="grid gap-4"
-                    onSubmit={(event) => {
-                      event.preventDefault()
-                      void configureProfilePosition()
-                    }}
-                  >
-                    <DialogHeader>
-                      <DialogTitle>Profile Position Config</DialogTitle>
-                      <DialogDescription>
-                        Edit the parameters sent with configure_position.
-                      </DialogDescription>
-                    </DialogHeader>
-
-                    <div className="grid gap-3 grid-cols-2">
-                      <div className="grid gap-2">
-                        <Label htmlFor="position-config-velocity">Profile velocity</Label>
-                        <Input
-                          id="position-config-velocity"
-                          inputMode="numeric"
-                          value={positionVelocity}
-                          onChange={(event) => setPositionVelocity(event.target.value)}
-                        />
-                      </div>
-                      <div className="grid gap-2">
-                        <Label htmlFor="position-config-accel">Acceleration</Label>
-                        <Input
-                          id="position-config-accel"
-                          inputMode="numeric"
-                          value={positionAccel}
-                          onChange={(event) => setPositionAccel(event.target.value)}
-                        />
-                      </div>
-                      <div className="grid gap-2">
-                        <Label htmlFor="position-config-decel">Deceleration</Label>
-                        <Input
-                          id="position-config-decel"
-                          inputMode="numeric"
-                          value={positionDecel}
-                          onChange={(event) => setPositionDecel(event.target.value)}
-                        />
-                      </div>
-                      <div className="grid gap-2">
-                        <Label htmlFor="position-config-end-velocity">End velocity</Label>
-                        <Input
-                          id="position-config-end-velocity"
-                          inputMode="numeric"
-                          value={positionEndVelocity}
-                          onChange={(event) => setPositionEndVelocity(event.target.value)}
-                        />
-                      </div>
-                      <div className="grid gap-2 sm:col-span-2">
-                        <Label htmlFor="position-config-motion-profile">
-                          Motion profile type
-                        </Label>
-                        <Input
-                          id="position-config-motion-profile"
-                          inputMode="numeric"
-                          value={positionMotionProfileType}
-                          onChange={(event) => setPositionMotionProfileType(event.target.value)}
-                        />
-                      </div>
-                    </div>
-
-                    <DialogFooter>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        onClick={() => setPositionConfigOpen(false)}
-                      >
-                        Cancel
-                      </Button>
-                      <Button
-                        type="submit"
-                        disabled={!serialReady || Boolean(busyCommand)}
-                      >
-                        {busyCommand === "configure_position" ? (
-                          <Loader2 className="animate-spin" />
-                        ) : (
-                          <Zap />
-                        )}
-                        Submit
-                      </Button>
-                    </DialogFooter>
-                  </form>
-                </DialogContent>
-              </Dialog>
 
               <div className="fixed right-4 bottom-4 z-40 flex items-end gap-2 md:right-6 md:bottom-6">
                 <DropdownMenu>
