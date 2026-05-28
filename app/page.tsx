@@ -429,14 +429,14 @@ export default function Page() {
 
   const configureProfilePosition = React.useCallback(async () => {
     const profileVelocity = Math.abs(parseInteger(positionVelocity, 2000)) * 100
-    const accel = Math.abs(parseInteger(positionAccel, 1000)) * 100
-    const decel = Math.abs(parseInteger(positionDecel, 1000)) * 100
+    const profileAcceleration = Math.abs(parseInteger(positionAccel, 1000)) * 100
+    const profileDeceleration = Math.abs(parseInteger(positionDecel, 1000)) * 100
 
     await runCommand({
       cmd: "configure_position",
       profileVelocity,
-      accel,
-      decel,
+      profileAcceleration,
+      profileDeceleration,
       endVelocity: parseInteger(positionEndVelocity),
       motionProfileType: parseInteger(positionMotionProfileType),
     })
