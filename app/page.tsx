@@ -130,6 +130,7 @@ type PendingRequest = {
 
 const BAUD_RATE = 115200
 const COMMAND_TIMEOUT_MS = 5000
+const STATUSWORD_HOMED_MASK = 0x1000
 
 function formatBoolean(value: boolean | undefined) {
   if (value === undefined) return "Unknown"
@@ -152,6 +153,7 @@ export default function Page() {
   const [openingSerial, setOpeningSerial] = React.useState(false)
   const [busyCommand, setBusyCommand] = React.useState<string | null>(null)
   const [status, setStatus] = React.useState<DriveStatus>({})
+  const [statuswordHomed, setStatuswordHomed] = React.useState<boolean | undefined>(undefined)
   const [lastResponse, setLastResponse] = React.useState<SerialResponse | null>(null)
   const [lastError, setLastError] = React.useState<string | null>(null)
   const [log, setLog] = React.useState<string[]>([])
@@ -494,11 +496,18 @@ export default function Page() {
   }, [customCommand, runCommand])
 
   const serialReady = serialConnected && serialWritable
+
+  React.useEffect(() => {
+    if (typeof status.statusword !== "number") return
+
+    setStatuswordHomed(Boolean(status.statusword & STATUSWORD_HOMED_MASK))
+  }, [status.statusword])
+
   const driveReady = Boolean(
     serialReady &&
     // status.connected &&
     status.enabled &&
-    status.homed &&
+    statuswordHomed &&
     !status.fault
   )
   const motionBlocked = !driveReady || Boolean(busyCommand)
@@ -507,9 +516,9 @@ export default function Page() {
     console.log(motionBlocked, driveReady, busyCommand)
     console.log("Connected: ", status.connected)
     console.log("Enabled: ", status.enabled)
-    console.log("Homed: ", status.homed)
+    console.log("Homed: ", statuswordHomed)
     console.log("Fault: ", status.fault)
-  }, [driveReady, busyCommand, status])
+  }, [driveReady, busyCommand, status, statuswordHomed])
 
   React.useEffect(() => {
     console.log("Speed: ", speed)
@@ -972,7 +981,7 @@ export default function Page() {
                     <Separator />
                     <CardContent className="grid grid-cols-2 gap-4">
                       <StatusTile label="Enabled" value={formatBoolean(status.enabled)} good={status.enabled} />
-                      <StatusTile label="Homed" value={formatBoolean(status.homed)} good={status.homed} />
+                      <StatusTile label="Homed" value={formatBoolean(statuswordHomed)} good={statuswordHomed} />
                       <StatusTile label="Moving" value={formatBoolean(status.moving)} good={!status.moving} />
                       <StatusTile label="Warning" value={formatBoolean(status.warning)} good={!status.warning} />
 
