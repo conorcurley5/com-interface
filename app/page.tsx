@@ -1059,7 +1059,7 @@ export default function Page() {
                       disabled={Boolean(busyCommand)}
                     >
                       <MoreVertical />
-                      Control
+                      {/* Control */}
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" side="top" sideOffset={10} className="min-w-44">
@@ -1113,7 +1113,7 @@ export default function Page() {
                   disabled={!serialReady || Boolean(busyCommand)}
                 >
                   <ShieldAlert />
-                  Quick Stop
+                  {/* Quick Stop */}
                 </Button>
               </div>
             </div>
