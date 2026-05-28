@@ -630,11 +630,11 @@ export default function Page() {
                     <CardContent className="servo-motion-content flex-row grow-1 gap-4">
                       <div className="grid grid-cols-2 gap-4">
                         <div className="flex flex-col items-center py-4 bg-muted rounded-md">
-                          <p className="text-xl font-semibold">{status.targetVelocity} 879</p>
+                          <p className="text-xl font-semibold">{status.targetVelocity ?? 0}</p>
                           <p className="text-xs mt-2 opacity-75">Target Velocity</p>
                         </div>
                         <div className="flex flex-col items-center py-4 bg-muted rounded-md">
-                          <p className="text-xl font-semibold">{status.targetVelocity} 879</p>
+                          <p className="text-xl font-semibold">{status.velocityActual ?? 0}</p>
                           <p className="text-xs mt-2 opacity-75">Actual Velocity</p>
                         </div>
                       </div>
@@ -707,15 +707,15 @@ export default function Page() {
                     <CardContent className="servo-motion-content flex-row grow-1  gap-4">
                       <div className="grid grid-cols-3 gap-4">
                         <div className="flex flex-col items-center py-4 bg-muted rounded-md">
-                          <p className="text-xl font-semibold">{status.targetVelocity} 879</p>
+                          <p className="text-xl font-semibold">{status.positionActual ?? 0}</p>
                           <p className="text-xs mt-2 opacity-75">Actual Position</p>
                         </div>
                         <div className="flex flex-col items-center py-4 bg-muted rounded-md">
-                          <p className="text-xl font-semibold">{status.targetVelocity} 879</p>
+                          <p className="text-xl font-semibold">{status.targetPosition ?? 0}</p>
                           <p className="text-xs mt-2 opacity-75">Position Demand</p>
                         </div>
                         <div className="flex flex-col items-center py-4 bg-muted rounded-md">
-                          <p className="text-xl font-semibold">{status.targetVelocity} 879</p>
+                          <p className="text-xl font-semibold">{status.positionDemand ?? 0}</p>
                           <p className="text-xs mt-2 opacity-75">Target Position</p>
                         </div>
                       </div>
@@ -895,7 +895,7 @@ export default function Page() {
                       </DialogDescription>
                     </DialogHeader>
 
-                    <div className="grid gap-3 sm:grid-cols-2">
+                    <div className="grid gap-3 grid-cols-2">
                       <div className="grid gap-2">
                         <Label htmlFor="velocity-config-accel">Acceleration</Label>
                         <Input
@@ -976,7 +976,7 @@ export default function Page() {
                       </DialogDescription>
                     </DialogHeader>
 
-                    <div className="grid gap-3 sm:grid-cols-2">
+                    <div className="grid gap-3 grid-cols-2">
                       <div className="grid gap-2">
                         <Label htmlFor="position-config-velocity">Profile velocity</Label>
                         <Input
