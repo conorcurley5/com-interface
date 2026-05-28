@@ -460,7 +460,7 @@ export default function Page() {
 
   const moveAbsolute = React.useCallback(async () => {
     await runCommand({ cmd: "move_abs", position: parseInteger(position) })
-    await runCommand({ cmd: "get_status" })
+    // await runCommand({ cmd: "get_status" })
   }, [position, runCommand])
 
   const sendCustomCommand = React.useCallback(async () => {
