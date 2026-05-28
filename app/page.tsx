@@ -609,17 +609,6 @@ export default function Page() {
         <div className="flex flex-1 flex-col">
           <div className="@container/main flex flex-1 flex-col gap-2 h-full">
             <div className="servo-main flex flex-col gap-4 p-4 md:gap-6 md:p-6 h-full">
-              <div className="grid grid-cols-1 gap-4">
-                <div className="grid grid-cols-4 gap-4">
-
-                    {/* <div className="servo-status-grid grid gap-2 sm:grid-cols-2 lg:grid-cols-4"> */}
-                      <StatusTile label="Enabled" value={formatBoolean(status.enabled)} good={status.enabled} />
-                      <StatusTile label="Homed" value={formatBoolean(status.homed)} good={status.homed} />
-                      <StatusTile label="Moving" value={formatBoolean(status.moving)} good={!status.moving} />
-                      <StatusTile label="Warning" value={formatBoolean(status.warning)} good={!status.warning} />
-                    {/* </div> */}
-                  </div>
-              </div>
 
               <Tabs defaultValue="telemetry" className="servo-tabs  gap-4" orientation="vertical">
                 <TabsList className="servo-tab-list w-fit">
@@ -855,6 +844,12 @@ export default function Page() {
                     </CardHeader>
                     <Separator />
                     <CardContent className="grid grid-cols-2 gap-4">
+                      <StatusTile label="Enabled" value={formatBoolean(status.enabled)} good={status.enabled} />
+                      <StatusTile label="Homed" value={formatBoolean(status.homed)} good={status.homed} />
+                      <StatusTile label="Moving" value={formatBoolean(status.moving)} good={!status.moving} />
+                      <StatusTile label="Warning" value={formatBoolean(status.warning)} good={!status.warning} />
+
+                      <Separator className=" col-span-2" />
                       <Table>
                         <TableBody>
                           {telemetry.slice(0,5).map(([label, value]) => (
